@@ -1,6 +1,0 @@
-An article about how to set up network connection among containers on the same node.
-Since the containers are on the same host, only bridge, host, none and container modes are under consideration.
-I may discuss network connnection over nodes later. (overlay mode, etc)
-
-The article is already post on wechat.
-Refer to here(https://mp.weixin.qq.com/s/ek7PV2SbKfTPN-Omb9nKHw).
