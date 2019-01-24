@@ -6,4 +6,4 @@ I may discuss network connnection over nodes later. (overlay mode, etc)
 
 The article is already post on wechat.
 
-Refer to here[https://mp.weixin.qq.com/s/ek7PV2SbKfTPN-Omb9nKHw].
+Refer to 【here】（https://mp.weixin.qq.com/s/ek7PV2SbKfTPN-Omb9nKHw）.
