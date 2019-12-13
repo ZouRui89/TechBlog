@@ -33,17 +33,21 @@ Network
 可以看到，在如下图所示的结构下，Container A 和 Container B 同属于 backend network，这两个 container通过各自紫色的 endpoint 构成 network 连接；container B和 container C 同属于 frontend network，通过蓝色的 endpoint 构成 network 连接。因此 container A 和 container B之间可以通信，container B和 container C之间也可以通信。  
   
 接下来重点看一下 container B 内部的两个 endpoints，虽然 backend network 和 frontend network 在 container B 内都有各自对应的 endpoint，但紫色 endpoint 和蓝色 endpoint 间不构成通信。因此 backend network 和 frontend network 是两个完全隔离的 network，并不因为连接同一个 container 而产生连通。显而易见，container A 和 container C 间其实是无法通信的。  
-
+![cnm](../pic/cnm.png)
    
 ## 2.PouchContainer 内置的 network 模式
 ### 2.1 bridge 模式
 bridge 模式是 PouchContainer 默认的网络模式，在创建容器不指定 network 模式，即不写--net参数，该容器就会以 bridge 模式创建。pouchd启动的时候，会自动在主机上创建一个虚拟网桥 p0。后续以 bridge 模式创建容器时，pouchd从 p0 网桥所在的 IP 网段中选取一个未使用的 IP 分配给容器的 eth0 网卡，p0 的 IP 是这些容器的默认网关。  
+![bridge](../pic/bridge.jpeg)
 ### 2.2 host 模式
 在启动容器的时候，选择 host 模式，那么容器将不会获得独立的 network namespace，而是和主机共享 network namespace。因此，这个容器也就没有自己的网卡和 IP 配置，会使用主机的 IP 和端口，但 fs 和 pid 等与主机还是隔离的。  
+![host](../pic/host.jpeg)
 ### 2.3 container 模式
 以 container 模式创建的容器，会和已经存在的容器共享一个 network namespace，直接沿用其 veth 设备对。  
+![container](../pic/container.jpeg)
 ### 2.4 none 模式
 使用 none 模式创建的容器，拥有独立的 network namespace，但是不会对容器进行任何的网络配置。因此，可以认为 none 模式下的容器，是不和其它容器通信的。不过，在容器创建后，可以再给它添加网卡、配置 IP，这样就可以与同一个 network 下的容器通信了。  
+![none](../pic/none.jpeg)
 ### 2.5 CNM 与 network 模式的概念交叉
 一个 network 是一个唯一的、可识别的 endpoint 组，组内的 endpoint 可以相互通讯。对比 CNM 来看，endpoint 可以简单理解成 veth 设备对，容器的 sandbox 里可以有多个 endpoints，每个 endpoint 代表和一个特定 network 的连接关系。  
 
