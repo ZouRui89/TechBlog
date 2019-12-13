@@ -53,7 +53,7 @@ bridge 模式是 PouchContainer 默认的网络模式，在创建容器不指定
 
 ## 3. network connect 的流程分析
 // daemon/mgr/container.go  
-![connect](../pic/pic1.png)
+![connect](../pic/pic1.png)  
 可以看到在Connect函数里，首先根据传入的参数获取到具体的 container 和 network。而epConfig参数里面，存放的是在 CLI 端通过 flag 传入的参数，如 container 在特定 network 中的别名、指定的 IP 范围等。  
   
 查看c.State.Status来判断 container 此时的状态，dead 状态的 container 是无法执行 connect 操作的。对于非 running 但是还 live的container，只是简单地调用updateNetworkConfig（）来更新 container 的网络配置，将传入的epConfig加入到容器的 network 配置中。在这种情况下，不会为 container 分配网卡，因此 container 并没有成功连通到 network 中。对于 running 状态的 container，调用connectToNetwork（）来进行后续的操作，connectToNetwork（）会根据给定的 network 和 container 进行网卡的配置，再在主机上分配一个网卡，最后将网卡加入到 container 的 sandbox 里面。这样，container 就成功地连接到 network 上了！具体的流程会在后续进行解析。  
@@ -61,11 +61,11 @@ bridge 模式是 PouchContainer 默认的网络模式，在创建容器不指定
 c.Write(mgr.Store)的作用，是将 container 连接到 network 上的一系列配置写入 container 的 metadata 里面，这样就保证了数据的持久化。否则，建立的 network 连接只是一次性的，所有的数据和相关配置在pouchd重启后都会丢失。  
   
 // daemon/mgr/container.go  
-![connect-to-network](../pic/pic2.png)
+![connect-to-network](../pic/pic2.png)  
 endpoint 里面包含三部分的信息，一部分的信息来自于 container，一部分的信息来自 network，最后一部分信息是 connect 命令里 flag 中的配置。buildContainerEndpoint（）的逻辑比较简单，就是获取到 endpoint 需要的 container 相关信息。随后调用了NetworkMgr的EndpointCreate（）来进行具体的构建。  
   
 // daemon/mgr/network.go  
-![ep-create](../pic/pic3.png)
+![ep-create](../pic/pic3.png)  
 创建 endpoint 的整个过程，都是调用 libnetwork 来实现的。首先调用endpointOptions（）来构建接口要求的EndpointOption参数，这个 setter 函数类型的参数能将不同的 option 传递给 network 和 endpoint 的接口。随后调用 libnetwork 的
 CreateEndpoint（）接口来进行具体的构建。CreateEndpoint（）执行的实际工作包括为这个 endpoint 分配 IP 和接口（Iface），对应的配置会被应用到 Endpoint 中，其中包括 iptables 的配置规则和端口信息等。
 
