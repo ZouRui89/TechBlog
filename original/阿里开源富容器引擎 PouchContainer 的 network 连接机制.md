@@ -41,13 +41,13 @@ bridge 模式是 PouchContainer 默认的网络模式，在创建容器不指定
 ![bridge](../pic/bridge.jpeg)
 ### 2.2 host 模式
 在启动容器的时候，选择 host 模式，那么容器将不会获得独立的 network namespace，而是和主机共享 network namespace。因此，这个容器也就没有自己的网卡和 IP 配置，会使用主机的 IP 和端口，但 fs 和 pid 等与主机还是隔离的。  
-![host](../pic/host.jpeg)
+![host](../pic/host.png)
 ### 2.3 container 模式
 以 container 模式创建的容器，会和已经存在的容器共享一个 network namespace，直接沿用其 veth 设备对。  
 ![container](../pic/container.jpeg)
 ### 2.4 none 模式
 使用 none 模式创建的容器，拥有独立的 network namespace，但是不会对容器进行任何的网络配置。因此，可以认为 none 模式下的容器，是不和其它容器通信的。不过，在容器创建后，可以再给它添加网卡、配置 IP，这样就可以与同一个 network 下的容器通信了。  
-![none](../pic/none.jpeg)
+![none](../pic/none.png)
 ### 2.5 CNM 与 network 模式的概念交叉
 一个 network 是一个唯一的、可识别的 endpoint 组，组内的 endpoint 可以相互通讯。对比 CNM 来看，endpoint 可以简单理解成 veth 设备对，容器的 sandbox 里可以有多个 endpoints，每个 endpoint 代表和一个特定 network 的连接关系。  
 
