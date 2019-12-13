@@ -33,6 +33,7 @@ Network
 可以看到，在如下图所示的结构下，Container A 和 Container B 同属于 backend network，这两个 container通过各自紫色的 endpoint 构成 network 连接；container B和 container C 同属于 frontend network，通过蓝色的 endpoint 构成 network 连接。因此 container A 和 container B之间可以通信，container B和 container C之间也可以通信。  
   
 接下来重点看一下 container B 内部的两个 endpoints，虽然 backend network 和 frontend network 在 container B 内都有各自对应的 endpoint，但紫色 endpoint 和蓝色 endpoint 间不构成通信。因此 backend network 和 frontend network 是两个完全隔离的 network，并不因为连接同一个 container 而产生连通。显而易见，container A 和 container C 间其实是无法通信的。  
+
    
 ## 2.PouchContainer 内置的 network 模式
 ### 2.1 bridge 模式
